@@ -10,6 +10,28 @@ export default function Home() {
     "in-progress": [],
     completed: [],
   });
+  const [data, setData] = useState([]); 
+
+  useEffect(() => {
+    try {
+      fetch('http://localhost:5000/api/v1/task', {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjcxZjNmMmNkLTVjMTUtNDUyMC05ZDk5LWY0NmY1MWFkMzQxMCIsImlhdCI6MTcxODU1NDg1OSwiZXhwIjoxNzE4NTU4NDU5fQ.KkRJOLq9xdkOs7ylcOiEE7Ful9jzwZTpMHRtGQrMYDc',
+        },
+      })
+        .then(async (res) => res.ok && (await res.json()))
+        .then((r) => r?.length && setData(r))
+        .catch((e) => console.log(e));
+    } catch (error) {
+      notification.error({ message: error.message || error });
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log("Data : ", data);
+  }, [data])
 
   useEffect(() => {
     const getTasks = async () => {
