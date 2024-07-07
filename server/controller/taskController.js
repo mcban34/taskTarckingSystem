@@ -44,8 +44,12 @@ taskController.deleteTask = async (req, res) => {
 
 taskController.updateTask = async (req, res) => {
     try {
-        
-        const data = await db.Task.update( req.body.body , req.body.where , {raw : true});
+
+        const data = await db.Task.update(
+            req.body.body, 
+            { where: req.body.where },
+            { raw: true }
+        );
 
         return res.status(200).json(data);
 
