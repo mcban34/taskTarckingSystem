@@ -1,11 +1,14 @@
 import Link from 'next/link'
-import React, { useState } from 'react'
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react'
 
 const Index = () => {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
+
+    const router = useRouter()
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -23,9 +26,40 @@ const Index = () => {
             console.log("Please fill out all fields.");
             return;
         }
+        else {
+            try {
+                fetch('http://localhost:5000/api/v1/employee/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                })
+                    .then(async (res) => res.ok && (await res.json()))
+                    .then((value) => {
+                        if (value != false) {
+                            const { token } = value
+                            router.push("/dashboard")
+                            localStorage.setItem("token", token)
+                        }
+                        else {
+                            alert("hatalı!")
+                        }
+                    })
+                    .catch((e) => console.log(e));
+            } catch (error) {
+                notification.error({ message: error.message || error });
+            }
+        }
 
         console.log("Form Data:", formData);
     }
+
+
+
+    useEffect(() => {
+
+    }, []);
 
     return (
         <div className={`flex min-h-screen flex-col`}>

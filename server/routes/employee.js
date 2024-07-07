@@ -9,7 +9,7 @@ router.post('/', employeeController.createEmployee);
 router.delete('/', employeeController.deleteEmployee);
 router.put('/', employeeController.updateEmployee);
 
-router.get('/login', employeeController.login);
+router.post('/login', employeeController.login);
 
 
 module.exports = router;
