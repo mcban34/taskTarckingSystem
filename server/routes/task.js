@@ -4,9 +4,9 @@ var taskController = require('../controller/taskController');
 const verify = require('../config/verifyToken');
 
 
-router.get('/', verify , taskController.getAllTask);
-router.post('/', taskController.createTask);
-router.delete('/', taskController.deleteTask);
-router.put('/', taskController.updateTask);
+router.get('/', verify, taskController.getAllTask);
+router.post('/', verify, taskController.createTask);
+router.delete('/', verify, taskController.deleteTask);
+router.put('/', verify, taskController.updateTask);
 
 module.exports = router;

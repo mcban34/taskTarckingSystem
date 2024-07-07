@@ -50,7 +50,7 @@ taskController.updateTask = async (req, res) => {
             { where: req.body.where },
             { raw: true }
         );
-
+        
         return res.status(200).json(data);
 
     } catch (error) {
