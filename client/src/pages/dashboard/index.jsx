@@ -1,3 +1,4 @@
+import { TaskDetail } from "@/Components/TaskDetail";
 import axios from "axios";
 import { Inter } from "next/font/google";
 import { useRouter } from "next/router";
@@ -9,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 const convertDateFormat = (x) => {
   const date = new Date(x);
-  const formattedDate = date.toLocaleDateString('tr-TR'); // "01.12.1999"
+  const formattedDate = date.toLocaleDateString('tr-TR')
   return formattedDate
 }
 
@@ -20,8 +21,9 @@ export default function Home() {
     "in-progress": [],
     completed: [],
   });
-
   const [data, setData] = useState([]);
+  const [isOpenDialog, setIsOpenDialog] = useState(false)
+  const [modalTaskData, setModalTaskData] = useState(null)
 
   useEffect(() => {
     const getTasks = async () => {
@@ -175,8 +177,23 @@ export default function Home() {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             className={`mt-4 w-full rounded bg-white/20 p-5 text-white backdrop-blur-sm backdrop-opacity-90 ${snapshot.isDragging ? "bg-white/50 text-white" : "bg-white"}`}
-                          //!ÖNEMLİ : GÖREV DETAY İÇİN POP-UP AÇ
+                            onClick={() => {
+                              setIsOpenDialog(true)
+                              setModalTaskData(task)
+                            }}
                           >
+                            {
+                              modalTaskData != null && (
+                                <TaskDetail
+                                  isOpenDialog={isOpenDialog}
+                                  setIsOpenDialog={setIsOpenDialog}
+                                  title={modalTaskData.title}
+                                  description={modalTaskData.taskDescription}
+                                  startDate={convertDateFormat(modalTaskData.start_date)}
+                                  endDate={convertDateFormat(modalTaskData.finish_date)}
+                                />
+                              )
+                            }
                             <h3 className="text-2xl">{task.title}</h3>
                             <p className="text-sm">{task.taskDescription}</p>
                             <hr className="opacity-15 my-2" />
