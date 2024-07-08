@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { toast } from 'react-toastify';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,7 +27,7 @@ export default function Home() {
     const getTasks = async () => {
       // Kategorilere göre ayır
       const categorizedTasks = {
-        assigned: data.filter(task => task.status === 'Atandı'),
+        assigned: data.filter(task => task.status === 'assigned'),
         "in-progress": data.filter(task => task.status === 'in-progress'),
         completed: data.filter(task => task.status === 'completed'),
       };
@@ -36,6 +37,34 @@ export default function Home() {
 
     getTasks();
   }, [data]);
+
+  const dragEndSendRequest = (TaskId, TaskStatus) => {
+    const token = localStorage.getItem("token");
+    const data = {
+      body: {
+        status: TaskStatus
+      },
+      where: {
+        id: TaskId
+      }
+    };
+
+    fetch('http://localhost:5000/api/v1/task', {
+      method: 'PUT',
+      headers: {
+        'Authorization': `${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => res.json())
+      .then(value => {
+        toast.success(`Task is ${TaskStatus}`);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const onDragEnd = (result) => {
     const { source, destination } = result;
@@ -67,6 +96,7 @@ export default function Home() {
     };
 
     setTasks(updatedTasks);
+    dragEndSendRequest(movedTask.id, destination.droppableId)
 
     console.log("Moved Task ID:", movedTask.id, "New Status:", destination.droppableId);
   };
@@ -78,7 +108,8 @@ export default function Home() {
     border: '1px dashed #848DA2',
     borderRadius: '5px',
     width: '33%',
-    minHeight: '95vh',
+    height: '95vh',
+    overflowY: "auto"
   });
 
   const getItemStyle = (isDragging, draggableStyle) => ({
@@ -118,63 +149,10 @@ export default function Home() {
     sendRequest()
   }, [])
 
-
-  const test = () => {
-    const token = localStorage.getItem("token")
-
-    const updateData = {
-      body: {
-        // Güncellenmek istenen alanlar
-        taskDescription: "Updated description",
-        status: "completed"
-      },
-      where: {
-        // WHERE koşulu
-        id: "50ebbb6f-6369-4d03-b7e3-a8a4f40d6362"
-      }
-    };
-    
-    // fetch('http://localhost:5000/api/v1/task/update', {
-    //   method: 'PUT',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },  
-    //   body: JSON.stringify(updateData)
-    // })
-    // .then(response => response.json())
-    // .then(data => console.log('Success:', data))
-    // .catch(error => console.error('Error:', error));
-
-    const taskData = {
-      createdAt: "2024-07-06T12:52:34.625Z",
-      employee_id: "4953bfb5-2968-47fd-ba20-a908ecae7932",
-      finish_date: "1999-12-01T22:00:00.000Z",
-      id: "a3f2135a-29b9-46c0-8845-90877c7eed18",
-      start_date: "1999-12-01T22:00:00.000Z",
-      status: "completed",
-      taskDescription: "Dashboard sayfasında mobile bölümünde çok büyük kaymalar var. Düzenlemelerin yapılması gerekiyor..",
-      title: "Mobile Düzenlemeler",
-      updatedAt: "2024-07-06T12:52:34.625Z"
-    };
-
-    fetch('http://localhost:5000/api/v1/task/update', {
-      method: 'PUT',
-      headers: {
-        'Authorization': `${token}`,
-      },
-      body: JSON.stringify(updateData)
-    })
-      .then(response => response.json())
-      .then(data => console.log('Success:', data))
-      .catch(error => console.error('Error:', error));
-
-  }
-
   return (
     <main
       className={`flex bg-custom-gradient min-h-screen flex-col ${inter.className}`}
     >
-      <button onClick={test} className="text-white">test</button>
       <div
         class="w-11/12 mx-auto m-4 z-20"
       >
@@ -197,6 +175,7 @@ export default function Home() {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             className={`mt-4 w-full rounded bg-white/20 p-5 text-white backdrop-blur-sm backdrop-opacity-90 ${snapshot.isDragging ? "bg-white/50 text-white" : "bg-white"}`}
+                          //!ÖNEMLİ : GÖREV DETAY İÇİN POP-UP AÇ
                           >
                             <h3 className="text-2xl">{task.title}</h3>
                             <p className="text-sm">{task.taskDescription}</p>
