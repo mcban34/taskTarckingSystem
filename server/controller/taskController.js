@@ -34,7 +34,16 @@ taskController.deleteTask = async (req, res) => {
 
         const data = await db.Task.destroy( {where : {id : taskId}});
 
-        return res.status(200).json(data);
+        if(data) {
+            return res.status(200).json({
+                message : "Görev Silindi."
+            });
+        } else {
+            return res.status(200).json({
+                message : "Görev Silinemedi."
+            });
+        }
+        
 
     } catch (error) {
         console.log("ERROR", error);
@@ -50,9 +59,17 @@ taskController.updateTask = async (req, res) => {
             { where: req.body.where },
             { raw: true }
         );
-        
-        return res.status(200).json(data);
 
+        if(data) {
+            return res.status(200).json({
+                message : "Görev Başarıyla Güncellendi."
+            });
+        } else {
+            return res.status(200).json({
+                message : "Görev Güncellenemedi."
+            });
+        }
+        
     } catch (error) {
         console.log("ERROR", error);
         res.status(500).send(error?.message || error);
