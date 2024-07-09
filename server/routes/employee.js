@@ -5,9 +5,9 @@ const verify = require('../config/verifyToken')
 
 
 router.get('/', verify , employeeController.getAllEmployee);
-router.post('/', employeeController.createEmployee);
-router.delete('/', employeeController.deleteEmployee);
-router.put('/', employeeController.updateEmployee);
+router.post('/', verify, employeeController.createEmployee);
+router.delete('/', verify, employeeController.deleteEmployee);
+router.put('/', verify, employeeController.updateEmployee);
 
 router.post('/login', employeeController.login);
 
