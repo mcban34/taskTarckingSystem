@@ -5,6 +5,11 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { toast } from 'react-toastify';
+import { RiDeleteBinLine } from "react-icons/ri";
+import { IoInformationCircleOutline } from "react-icons/io5";
+import { DeleteTaskModal } from "@/Components/DeleteTaskModal";
+
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,19 +23,21 @@ export default function Home() {
   const router = useRouter()
   const [tasks, setTasks] = useState({
     assigned: [],
-    "in-progress": [],
+    inprogress: [],
     completed: [],
   });
   const [data, setData] = useState([]);
   const [isOpenDialog, setIsOpenDialog] = useState(false)
+  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false)
   const [modalTaskData, setModalTaskData] = useState(null)
+  const [taskId, setTaskId] = useState(null)
 
   useEffect(() => {
     const getTasks = async () => {
       // Kategorilere göre ayır
       const categorizedTasks = {
         assigned: data.filter(task => task.status === 'assigned'),
-        "in-progress": data.filter(task => task.status === 'in-progress'),
+        inprogress: data.filter(task => task.status === 'inprogress'),
         completed: data.filter(task => task.status === 'completed'),
       };
 
@@ -51,7 +58,7 @@ export default function Home() {
       }
     };
 
-    fetch('http://localhost:5000/api/v1/task', {
+    fetch('http://localhost:3000/api/v1/task', {
       method: 'PUT',
       headers: {
         'Authorization': `${token}`,
@@ -126,7 +133,7 @@ export default function Home() {
   const sendRequest = async () => {
     const token = localStorage.getItem("token")
 
-    fetch('http://localhost:5000/api/v1/task', {
+    fetch('http://localhost:3000/api/v1/task', {
       method: 'GET',
       headers: {
         'Authorization': `${token}`,
@@ -160,13 +167,14 @@ export default function Home() {
       >
         <div className="flex">
           <DragDropContext onDragEnd={onDragEnd}>
-            {['assigned', 'in-progress', 'completed'].map((status) => (
+            {['assigned', 'inprogress', 'completed'].map((status) => (
               <Droppable key={status} droppableId={status}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                     style={getListStyle(snapshot.isDraggingOver)}
+                    className=""
                   >
                     <h3 className="text-white mb-5 font-semibold text-xl text-center">{status}</h3>
                     {tasks[status].map((task, index) => (
@@ -177,10 +185,6 @@ export default function Home() {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             className={`mt-4 w-full rounded bg-white/20 p-5 text-white backdrop-blur-sm backdrop-opacity-90 ${snapshot.isDragging ? "bg-white/50 text-white" : "bg-white"}`}
-                            onClick={() => {
-                              setIsOpenDialog(true)
-                              setModalTaskData(task)
-                            }}
                           >
                             {
                               modalTaskData != null && (
@@ -194,7 +198,38 @@ export default function Home() {
                                 />
                               )
                             }
-                            <h3 className="text-2xl">{task.title}</h3>
+                            {
+                              <DeleteTaskModal
+                                isOpenDeleteDialog={isOpenDeleteDialog}
+                                setIsOpenDeleteDialog={setIsOpenDeleteDialog}
+                                taskId={taskId}
+                                setTasks={setTasks}
+                              />
+                            }
+                            <div className="flex justify-between">
+                              <h3 className="text-2xl">{task.title}</h3>
+                              <div className="flex items-center gap-1">
+                                <div
+                                  className="bg-white/20 w-7 h-7 flex justify-center items-center rounded-full"
+                                  onClick={() => {
+                                    setIsOpenDialog(true)
+                                    setModalTaskData(task)
+                                  }}
+                                >
+                                  <IoInformationCircleOutline />
+                                </div>
+                                <div
+                                  className="bg-white/20 w-7 h-7 flex justify-center items-center rounded-full"
+                                  onClick={() => {
+                                    setIsOpenDeleteDialog(true)
+                                    setTaskId(task.id)
+                                  }}
+                                >
+                                  <RiDeleteBinLine
+                                  />
+                                </div>
+                              </div>
+                            </div>
                             <p className="text-sm">{task.taskDescription}</p>
                             <hr className="opacity-15 my-2" />
                             <p className="text-sm">{convertDateFormat(task.start_date)} - {convertDateFormat(task.finish_date)}</p>
