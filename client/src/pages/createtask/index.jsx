@@ -2,6 +2,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import { toast } from 'react-toastify';
+import MenuToll from '@/Components/MenuTool';
 
 const Createtask = () => {
     const router = useRouter()
@@ -130,6 +131,7 @@ const Createtask = () => {
 
     return (
         <main className="flex bg-custom-gradient text-white min-h-screen flex-col items-center justify-center">
+            <MenuToll/>
             <div className="w-full h-full flex items-center justify-center">
                 <div className="mt-4 w-[35%] rounded bg-white/20 p-5 text-white backdrop-blur-sm backdrop-opacity-90">
                     <h2 className="text-2xl mb-3">Create New Task</h2>

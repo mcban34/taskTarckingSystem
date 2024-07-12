@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { RiDeleteBinLine } from "react-icons/ri";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { DeleteTaskModal } from "@/Components/DeleteTaskModal";
-
+import MenuToll from "@/Components/MenuTool";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -141,10 +141,10 @@ export default function Home() {
     })
       .then(res => res.json())
       .then(value => {
-        if(!value.error){
-            setData(value)
+        if (!value.error) {
+          setData(value)
         }
-        else{
+        else {
           router.push("/login")
         }
       })
@@ -163,8 +163,9 @@ export default function Home() {
       className={`flex bg-custom-gradient min-h-screen flex-col ${inter.className}`}
     >
       <div
-        class="w-11/12 mx-auto m-4 z-20"
+        className="w-10/12 mx-auto m-4 z-20"
       >
+        <MenuToll />
         <div className="flex">
           <DragDropContext onDragEnd={onDragEnd}>
             {['assigned', 'inprogress', 'completed'].map((status) => (
