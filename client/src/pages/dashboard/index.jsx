@@ -141,10 +141,10 @@ export default function Home() {
     })
       .then(res => res.json())
       .then(value => {
-        if (value.length > 0) {
-          setData(value)
+        if(!value.error){
+            setData(value)
         }
-        else {
+        else{
           router.push("/login")
         }
       })
