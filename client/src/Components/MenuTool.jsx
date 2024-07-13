@@ -28,7 +28,7 @@ const MenuToll = () => {
     }
 
     return (
-        <div className='absolute right-5 top-5'>
+        <div className='fixed z-50 md:absolute right-5 bottom-5 md:right-5 md:top-5'>
             <button
                 onClick={() => setIsOpen(true)}
                 className='bg-white/20 p-2 rounded-lg text-white backdrop-blur-sm backdrop-opacity-90'

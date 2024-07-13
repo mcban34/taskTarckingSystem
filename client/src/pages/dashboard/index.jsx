@@ -116,7 +116,7 @@ export default function Home() {
     margin: '0 4px',
     border: '1px dashed #848DA2',
     borderRadius: '5px',
-    width: '33%',
+    width: '100%',
     height: '95vh',
     overflowY: "auto"
   });
@@ -166,7 +166,7 @@ export default function Home() {
         className="w-10/12 mx-auto m-4 z-20"
       >
         <MenuToll />
-        <div className="flex">
+        <div className="lg:flex">
           <DragDropContext onDragEnd={onDragEnd}>
             {['assigned', 'inprogress', 'completed'].map((status) => (
               <Droppable key={status} droppableId={status}>
@@ -175,7 +175,7 @@ export default function Home() {
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                     style={getListStyle(snapshot.isDraggingOver)}
-                    className=""
+                    className="w-full"
                   >
                     <h3 className="text-white mb-5 font-semibold text-xl text-center">{status}</h3>
                     {tasks[status].map((task, index) => (
@@ -246,8 +246,8 @@ export default function Home() {
           </DragDropContext>
         </div>
       </div>
-      <div className="absolute z-10 top-0 left-0 inset-y-3 inset-x-0 w-80 rounded-full bg-gradient-to-b from-pink-500 via-purple-500 to-purple-600 blur-3xl opacity-10"></div>
-      <div className="absolute z-10 top-0 right-0 inset-y-0 inset-x-3/4 w-80 rounded-full bg-gradient-to-b from-pink-500 via-purple-500 to-purple-600 blur-3xl opacity-10"></div>
+      <div className="hidden lg:block absolute z-10 top-0 left-0 inset-y-3 inset-x-0 w-80 rounded-full bg-gradient-to-b from-pink-500 via-purple-500 to-purple-600 blur-3xl opacity-10"></div>
+      <div className="hidden lg:block absolute z-10 top-0 right-0 inset-y-0 inset-x-3/4 w-80 rounded-full bg-gradient-to-b from-pink-500 via-purple-500 to-purple-600 blur-3xl opacity-10"></div>
     </main>
   );
 }

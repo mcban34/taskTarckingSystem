@@ -133,7 +133,7 @@ const Createtask = () => {
         <main className="flex bg-custom-gradient text-white min-h-screen flex-col items-center justify-center">
             <MenuToll/>
             <div className="w-full h-full flex items-center justify-center">
-                <div className="mt-4 w-[35%] rounded bg-white/20 p-5 text-white backdrop-blur-sm backdrop-opacity-90">
+                <div className="mt-4  w-[90%] lg:w-[35%] rounded bg-white/20 p-5 text-white backdrop-blur-sm backdrop-opacity-90">
                     <h2 className="text-2xl mb-3">Create New Task</h2>
                     <form onSubmit={handleSubmit}>
                         <dl>
@@ -263,8 +263,8 @@ const Createtask = () => {
                     </form>
                 </div>
             </div>
-            <div className="absolute z-10 top-0 left-0 inset-y-3 inset-x-0 w-80 rounded-full bg-gradient-to-b from-pink-500 via-purple-500 to-purple-600 blur-3xl opacity-10"></div>
-            <div className="absolute z-10 top-0 right-0 inset-y-0 inset-x-3/4 w-80 rounded-full bg-gradient-to-b from-pink-500 via-purple-500 to-purple-600 blur-3xl opacity-10"></div>
+            <div className="hidden lg:block absolute z-10 top-0 left-0 inset-y-3 inset-x-0 w-80 rounded-full bg-gradient-to-b from-pink-500 via-purple-500 to-purple-600 blur-3xl opacity-10"></div>
+            <div className="hidden lg:block absolute z-10 top-0 right-0 inset-y-0 inset-x-3/4 w-80 rounded-full bg-gradient-to-b from-pink-500 via-purple-500 to-purple-600 blur-3xl opacity-10"></div>
         </main>
 
     )
