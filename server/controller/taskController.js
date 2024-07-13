@@ -4,7 +4,12 @@ let taskController = {}
 taskController.getAllTask = async (req, res) => {
     try {
         
-        const tasks = await db.Task.findAll({raw : true});
+        let tasks = await db.Task.findAll({raw : true});
+
+        for (const task of tasks) {
+            const Employee = await db.Employee.findOne({where : {id : task.employee_id}, raw : true})
+            task.full_name = Employee?.name + " " + Employee?.surname
+        }
 
         return res.json(tasks);
 
@@ -62,7 +67,7 @@ taskController.updateTask = async (req, res) => {
 
         if(data) {
             return res.status(200).json({
-                message : "Görev Başarıyla Güncellendi."
+                message : "Görev Başarıyla Güncellendiiii."
             });
         } else {
             return res.status(200).json({
