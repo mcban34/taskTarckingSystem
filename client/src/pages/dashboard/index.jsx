@@ -9,6 +9,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { DeleteTaskModal } from "@/Components/DeleteTaskModal";
 import MenuToll from "@/Components/MenuTool";
+import CreateTaskModal from "@/Components/CreateTaskModal";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -29,9 +30,10 @@ export default function Home() {
   const [data, setData] = useState([]);
   const [isOpenDialog, setIsOpenDialog] = useState(false)
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState(false)
+  const [isOpenCreateDialog, setIsOpenCreateDialog] = useState(false)
   const [modalTaskData, setModalTaskData] = useState(null)
   const [taskId, setTaskId] = useState(null)
-
+  const [activeCreateTask, setActiveCreateTask] = useState(null)
   useEffect(() => {
     const getTasks = async () => {
       // Kategorilere göre ayır
@@ -110,6 +112,11 @@ export default function Home() {
     console.log("Moved Task ID:", movedTask.id, "New Status:", destination.droppableId);
   };
 
+  const createTast = (status) => {
+    setActiveCreateTask(status)
+    setIsOpenCreateDialog(true)
+  }
+
   const getListStyle = (isDraggingOver) => ({
     background: isDraggingOver ? '#1A2541' : '',
     padding: 8,
@@ -117,8 +124,8 @@ export default function Home() {
     border: '1px dashed #848DA2',
     borderRadius: '5px',
     width: '100%',
-    height: '95vh',
-    overflowY: "auto"
+    height: '93vh',
+    // overflowY: "auto"
   });
 
   const getItemStyle = (isDragging, draggableStyle) => ({
@@ -175,70 +182,95 @@ export default function Home() {
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                     style={getListStyle(snapshot.isDraggingOver)}
-                    className="w-full"
+                    className="w-full focus:outline-none"
                   >
-                    <h3 className="text-white mb-5 font-semibold text-xl text-center">{status}</h3>
-                    {tasks[status].map((task, index) => (
-                      <Draggable key={task.id} draggableId={task.id} index={index} className="z-30">
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className={`mt-4 w-full rounded bg-white/20 p-5 text-white backdrop-blur-sm backdrop-opacity-90 ${snapshot.isDragging ? "bg-white/50 text-white" : "bg-white"}`}
-                          >
-                            {
-                              modalTaskData != null && (
-                                <TaskDetail
-                                  isOpenDialog={isOpenDialog}
-                                  setIsOpenDialog={setIsOpenDialog}
-                                  title={modalTaskData.title}
-                                  description={modalTaskData.taskDescription}
-                                  startDate={convertDateFormat(modalTaskData.start_date)}
-                                  endDate={convertDateFormat(modalTaskData.finish_date)}
-                                />
-                              )
-                            }
-                            {
-                              <DeleteTaskModal
-                                isOpenDeleteDialog={isOpenDeleteDialog}
-                                setIsOpenDeleteDialog={setIsOpenDeleteDialog}
-                                taskId={taskId}
-                                setTasks={setTasks}
-                              />
-                            }
-                            <div className="flex justify-between">
-                              <h3 className="text-2xl">{task.title}</h3>
-                              <div className="flex items-center gap-1">
-                                <div
-                                  className="bg-white/20 w-7 h-7 flex justify-center items-center rounded-full"
-                                  onClick={() => {
-                                    setIsOpenDialog(true)
-                                    setModalTaskData(task)
-                                  }}
-                                >
-                                  <IoInformationCircleOutline />
-                                </div>
-                                <div
-                                  className="bg-white/20 w-7 h-7 flex justify-center items-center rounded-full"
-                                  onClick={() => {
-                                    setIsOpenDeleteDialog(true)
-                                    setTaskId(task.id)
-                                  }}
-                                >
-                                  <RiDeleteBinLine
-                                  />
+                    <div className="h-[5%]">
+                      <h3 className="text-white mb-5 font-semibold text-xl text-center">{status}</h3>
+                    </div>
+                    <div className="h-[90%] overflow-y-auto">
+                      {tasks[status].map((task, index) => (
+                        <Draggable key={task.id} draggableId={task.id} index={index} className="z-30">
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              className={`mt-4 w-full z-40 rounded bg-white/20 p-5 text-white backdrop-blur-sm backdrop-opacity-90 ${snapshot.isDragging ? "bg-white/50 text-white" : "bg-white"}`}
+                              onClick={() => {
+                                setIsOpenDialog(true)
+                                setModalTaskData(task)
+                              }}
+                            >
+                              <div className="flex justify-between">
+                                <h3 className="text-2xl">{task.title}</h3>
+                                <div className="flex items-center gap-1">
+                                  <div
+                                    className="bg-white/20 w-7 z-50 h-7 flex justify-center items-center rounded-full"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setIsOpenDeleteDialog(true)
+                                      setTaskId(task.id)
+                                    }}
+                                  >
+                                    <RiDeleteBinLine
+                                    />
+                                  </div>
                                 </div>
                               </div>
+                              <p className="text-sm">{task.taskDescription}</p>
+                              <hr className="opacity-15 my-2" />
+                              <div className="flex justify-between">
+                                <p className="text-sm">{convertDateFormat(task.start_date)} - {convertDateFormat(task.finish_date)}</p>
+                                <p>{task.full_name}</p>
+                              </div>
                             </div>
-                            <p className="text-sm">{task.taskDescription}</p>
-                            <hr className="opacity-15 my-2" />
-                            <p className="text-sm">{convertDateFormat(task.start_date)} - {convertDateFormat(task.finish_date)}</p>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
+                          )}
+                        </Draggable>
+                      ))}
+                    </div>
+                    <div className="h-[5%]">
+                      <div className="text-center mt-3">
+                        <button
+                          className="text-white focus:outline-none"
+                          onClick={() => {
+                            createTast(status)
+                          }}
+                        >
+                          Add {status}
+                        </button>
+                      </div>
+                    </div>
+                    {
+                      isOpenCreateDialog && (
+                        <CreateTaskModal
+                          isOpenCreateDialog={isOpenCreateDialog}
+                          setIsOpenCreateDialog={setIsOpenCreateDialog}
+                          gelAllTask={sendRequest}
+                          activeCreateTask={activeCreateTask}
+                        />
+                      )
+                    }
+                    {
+                      modalTaskData != null && (
+                        <TaskDetail
+                          isOpenDialog={isOpenDialog}
+                          setIsOpenDialog={setIsOpenDialog}
+                          title={modalTaskData.title}
+                          description={modalTaskData.taskDescription}
+                          startDate={convertDateFormat(modalTaskData.start_date)}
+                          endDate={convertDateFormat(modalTaskData.finish_date)}
+                          fullName={modalTaskData.full_name}
+                        />
+                      )
+                    }
+                    {
+                      <DeleteTaskModal
+                        isOpenDeleteDialog={isOpenDeleteDialog}
+                        setIsOpenDeleteDialog={setIsOpenDeleteDialog}
+                        taskId={taskId}
+                        setTasks={setTasks}
+                      />
+                    }
                   </div>
                 )}
               </Droppable>

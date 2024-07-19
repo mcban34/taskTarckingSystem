@@ -3,7 +3,7 @@ import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react
 import { IoCloseCircleOutline } from "react-icons/io5";
 
 
-export const TaskDetail = ({ isOpenDialog, setIsOpenDialog, title, description, startDate, endDate }) => {
+export const TaskDetail = ({ isOpenDialog, setIsOpenDialog, title, description, startDate, endDate, fullName }) => {
     return (
         <Dialog
             open={isOpenDialog} onClose={() => setIsOpenDialog(false)}
@@ -14,15 +14,20 @@ export const TaskDetail = ({ isOpenDialog, setIsOpenDialog, title, description, 
                 <DialogPanel className="max-w-lg space-y-4 border bg-white p-4 max-h-[70vh] overflow-y-auto">
                     <div className='flex justify-between items-center'>
                         <DialogTitle className="font-bold">{title}</DialogTitle>
-                        <IoCloseCircleOutline 
-                            onClick={() => setIsOpenDialog(false)} 
+                        <IoCloseCircleOutline
+                            onClick={() => setIsOpenDialog(false)}
                             className='cursor-pointer size-6'
                         />
                     </div>
                     <Description className={"max-h-[30vh] overflow-y-auto"}>{description}</Description>
-                    <p className='text-sm'>
-                        <b>Start Date - End Date: {startDate} / {endDate}</b>
-                    </p>
+                    <div className='flex justify-between'>
+                        <p className='text-sm'>
+                            <b>{startDate} / {endDate}</b>
+                        </p>
+                        <p>
+                            {fullName}
+                        </p>
+                    </div>
                 </DialogPanel>
             </div>
         </Dialog>
