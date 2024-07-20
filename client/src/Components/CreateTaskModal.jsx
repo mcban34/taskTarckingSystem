@@ -104,7 +104,6 @@ const CreateTaskModal = ({ isOpenCreateDialog, setIsOpenCreateDialog, gelAllTask
                         toast.success(`Task is Created`);
                         gelAllTask()
                         setIsOpenCreateDialog(false)
-                        // router.push("/dashboard")
                     }
                     else {
                         toast.error(`ERROR! Please Try Again`);
@@ -151,7 +150,7 @@ const CreateTaskModal = ({ isOpenCreateDialog, setIsOpenCreateDialog, gelAllTask
             className="z-50 fixed inset-0 flex w-screen items-center justify-center bg-black/30 p-4 transition duration-300 ease-out data-[closed]:opacity-0"
         >
             <div className="fixed inset-0 flex w-screen items-center justify-center">
-                <DialogPanel className="w-[70%] space-y-4 border bg-white p-4 max-h-[70vh] overflow-y-auto">
+                <DialogPanel className="w-[50%] space-y-4 border bg-white p-4 max-h-[70vh] overflow-y-auto">
                     <div className='flex justify-between items-center'>
                         <DialogTitle className="font-bold">{activeCreateTask.charAt(0).toUpperCase() + activeCreateTask.slice(1)} Create Task</DialogTitle>
                         <span
@@ -200,20 +199,19 @@ const CreateTaskModal = ({ isOpenCreateDialog, setIsOpenCreateDialog, gelAllTask
                                 <dd className='relative'>
                                     {
                                         selectedEmployee && employees && (
-
                                             <Listbox value={selectedEmployee} onChange={handleEmployeeChange}>
-                                                <ListboxButton className="w-full bg-white/20 py-1 rounded-sm text-left pl-2 border">
+                                                <ListboxButton className=" bg-white/20 py-1 rounded-sm text-left pl-2 border w-52">
                                                     {selectedEmployee.name}
                                                 </ListboxButton>
                                                 <ListboxOptions
                                                     anchor="bottom"
-                                                    className="bg-white/80 mt-1 p-3 w-[32%] text-black backdrop-blur-sm backdrop-opacity-100"
+                                                    className="bg-gray-800 mt-1 p-3  text-white w-52"
                                                 >
                                                     {employees.map((person) => (
                                                         <ListboxOption
                                                             key={person.id}
                                                             value={person}
-                                                            className="data-[focus]:text-black/60 mt-1 duration-300 cursor-pointer"
+                                                            className="data-[focus]:text-white/60 mt-1 duration-300 cursor-pointer"
                                                         >
                                                             {person.name}
                                                         </ListboxOption>
@@ -235,7 +233,7 @@ const CreateTaskModal = ({ isOpenCreateDialog, setIsOpenCreateDialog, gelAllTask
                                         name="start_date"
                                         value={formData.start_date}
                                         onChange={handleChange}
-                                        className="text-white w-full py-1 pl-3 bg-white/20 backdrop-blur-sm backdrop-opacity-90"
+                                        className="w-full py-1 pl-3 bg-white/20 backdrop-blur-sm backdrop-opacity-90 border"
                                     />
                                 </dd>
                             </div>
@@ -250,7 +248,7 @@ const CreateTaskModal = ({ isOpenCreateDialog, setIsOpenCreateDialog, gelAllTask
                                         name="finish_date"
                                         value={formData.finish_date}
                                         onChange={handleChange}
-                                        className="text-white w-full py-1 pl-3 bg-white/20 backdrop-blur-sm backdrop-opacity-90"
+                                        className="border w-full py-1 pl-3 bg-white/20 backdrop-blur-sm backdrop-opacity-90"
                                     />
                                 </dd>
                             </div>
@@ -260,15 +258,15 @@ const CreateTaskModal = ({ isOpenCreateDialog, setIsOpenCreateDialog, gelAllTask
                                 </dt>
                                 <dd>
                                     <Listbox value={selectedStatus} onChange={handleStatusChange}>
-                                        <ListboxButton className="w-full bg-white/20 py-1 rounded-sm text-left pl-2">
+                                        <ListboxButton className="w-52 bg-white/20 py-1 rounded-sm text-left pl-2 border">
                                             {selectedStatus.name}
                                         </ListboxButton>
-                                        <ListboxOptions anchor="bottom" className="bg-white/80 mt-1 p-3 w-[32%] text-black backdrop-blur-sm backdrop-opacity-100">
+                                        <ListboxOptions anchor="bottom" className=" mt-1 p-3 w-52 bg-gray-800 text-white">
                                             {statuses.map((person) => (
                                                 <ListboxOption
                                                     key={person.id}
                                                     value={person}
-                                                    className="data-[focus]:text-black/60 mt-1 duration-300 cursor-pointer"
+                                                    className="data-[focus]:text-white/60 mt-1 duration-300 cursor-pointer"
                                                 >
                                                     {person.name}
                                                 </ListboxOption>
@@ -280,7 +278,7 @@ const CreateTaskModal = ({ isOpenCreateDialog, setIsOpenCreateDialog, gelAllTask
                         </dl>
                         <button
                             type='submit'
-                            className='bg-black/50 text-white-500 py-1 px-3 rounded-sm w-full'
+                            className='bg-blue-100 text-blue-500 py-1 px-3 rounded-sm w-full'
                         >
                             Create Task
                         </button>
